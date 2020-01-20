@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  envoy:
+    build:
+      context: .
+      dockerfile: envoy.Dockerfile
+    ports:
+      - '8080:8080'
+      - '9901:9901'
+    networks:
+            server-net:
+                ipv4_address: '10.1.0.2'
+  server:
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    ports:
+      - '9090:9090'
+    networks:
+             server-net:
+                ipv4_address: '10.1.0.3'
+
+networks:
+  server-net:
+    ipam:
+        driver: default
+        config:
+            - subnet: 10.1.0.0/24
